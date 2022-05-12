@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { Table } from 'antd';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+ const columns = [
+   {
+     title: 'Name',
+     dataIndex: 'first_name',
+     key: 'first_name',
+   },
+   {
+     title: 'Email',
+     dataIndex: 'email',
+     key: 'email',
+   },
+   {
+     title: 'IMG',
+     dataIndex: 'avatar',
+    //  key: 'avatar',
+     render: (t,x) => <img src={x.avatar} />
+   },
+ ];
+ const [data, setData] = useState([]);
+ useEffect(() => {
+   axios.get('/api/users').then((result) => {
+     setData(result.data);
+   });
+ }, []);
+ return <Table dataSource={data} columns={columns} pagination={false} />;
 }
 
-export default App;
